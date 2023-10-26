@@ -32,6 +32,9 @@ jobs:
           zip -r deployment-package/lambda_function.zip deployment-package/*
         working-directory: ${{ github.workspace }}
 
+      - name: Check AWS CLI version
+        run: aws --version      
+
       - name: Deploy to AWS Lambda
         run: |
           aws lambda update-function-code \
