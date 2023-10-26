@@ -18,8 +18,11 @@ jobs:
         with:
           python-version: 3.11
 
+      - name: Create venv
+        run: python3 -m venv venv
+
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: venv/bin/pip install -r requirements.txt
 
       - name: Copy venv and templates
         run: |
