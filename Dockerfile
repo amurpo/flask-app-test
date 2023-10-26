@@ -13,8 +13,8 @@ RUN pip install -r requirements.txt
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Make port 80 available to the world outside this container
-EXPOSE 80
+# Make port 4000 available to the world outside this container
+EXPOSE 4000
 
 # Define the command to run your application with Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:80", "app:create_app()"]
+CMD ["gunicorn", "--bind", "0.0.0.0:4000", "app:create_app()"]
