@@ -1,0 +1,39 @@
+name: Deploy to AWS Lambda
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Copy venv and templates
+        run: |
+          mkdir -p deployment-package
+          cp -r venv deployment-package/
+          cp -r templates deployment-package/
+          zip -r deployment-package/lambda_function.zip deployment-package/*
+        working-directory: ${{ github.workspace }}
+
+      - name: Deploy to AWS Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name your-lambda-function-name \
+            --zip-file fileb://deployment-package/lambda_function.zip
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
