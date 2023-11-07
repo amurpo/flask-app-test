@@ -24,3 +24,11 @@ __pycache__
 package
 function.zip
 .github/*
+
+# yaml
+*.yaml
+*.yml
+
+prometheus/*
+grafana/*
+

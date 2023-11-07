@@ -20,23 +20,23 @@ services:
     networks:
       - monitoring-net
 
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    volumes:
-      - grafana-data:/var/lib/grafana  # Create a volume for Grafana data
-      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-    ports:
-      - "3000:3000"
-    networks:
-      - monitoring-net
-    depends_on:
-      - prometheus
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://prometheus:9090/-/healthy"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+  # grafana:
+  #   image: grafana/grafana
+  #   container_name: grafana
+  #   volumes:
+  #     - grafana-data:/var/lib/grafana
+  #     - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - monitoring-net
+  #   depends_on:
+  #     - prometheus
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://prometheus:9090/-/healthy"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
 
   node-exporter:
     image: prom/node-exporter
@@ -58,8 +58,8 @@ services:
     networks:
       - monitoring-net
 
-volumes:  # Define a Docker volume for Grafana data
-  grafana-data:
+# volumes:  # Define a Docker volume for Grafana data
+#   grafana-data:
 
 networks:
   monitoring-net:
