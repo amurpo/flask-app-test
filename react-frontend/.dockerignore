@@ -1,0 +1,27 @@
+# Ignore development and build files
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Ignore version control files
+.git
+.gitignore
+
+# Ignore logs and temp files
+*.log
+*.swp
+
+# Ignore configuration files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Ignore test files
+__tests__
+# Exclude individual files or directories you don't want in your Docker image
+# Add these lines to include the public and src directories
+# !/public/
+# !/src/
