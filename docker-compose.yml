@@ -8,6 +8,21 @@ services:
   #   networks:
   #     - osobusa-net
 
+  # mysql:
+  #   image: mysql:5.7
+  #   container_name: mysql
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - "3306:3306"
+  #   mem_limit: 512m  # Limit container memory to 512MB
+  #   volumes:
+  #     - ./oso.sql:/docker-entrypoint-initdb.d/oso.sql
+  #     - ./my.cnf:/etc/mysql/conf.d/my.cnf
+
+  #   networks:
+  #     osobusa-net:
+
   backend:
     image: amurpo/go-backend
     ports:
@@ -23,7 +38,7 @@ services:
       - "3000:3000"
     networks:
       - osobusa-net
-      
+
   # prometheus:
   #   image: prom/prometheus
   #   container_name: prometheus
