@@ -10,10 +10,12 @@ import (
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
 	"github.com/joho/godotenv"
+	"github.com/rs/cors" // Added CORS package
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	// Added CORS package
 )
 
 // Image define la estructura de un objeto de imagen que se almacenará en MongoDB.
@@ -85,7 +87,12 @@ func main() {
 			Resolve: ImagesResolver,
 		},
 	}
-
+	// Create a new CORS middleware handler allowing requests from your frontend
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"http://localhost:5000"}, // Replace with your frontend's port
+		AllowedMethods: []string{"GET", "POST", "OPTIONS"},              // Add the methods you need
+		AllowedHeaders: []string{"Content-Type"},
+	})
 	rootQuery := graphql.ObjectConfig{Name: "RootQuery", Fields: fields}
 	schemaConfig := graphql.SchemaConfig{Query: graphql.NewObject(rootQuery)}
 	schema, err := graphql.NewSchema(schemaConfig)
@@ -93,6 +100,7 @@ func main() {
 		log.Fatalf("failed to create new schema, error: %v", err)
 	}
 
+	handlerWithCORS := c.Handler(http.DefaultServeMux)
 	// Configura el manejador de GraphQL.
 	h := handler.New(&handler.Config{
 		Schema: &schema,
@@ -103,5 +111,11 @@ func main() {
 	http.Handle("/graphql", h)
 	fmt.Println("Server is running on http://localhost:8000")
 	log.Fatal(http.ListenAndServe(":8000", nil))
-}
 
+	// Set up your GraphQL endpoint with the handler including CORS
+	http.Handle("/graphql", handlerWithCORS)
+
+	fmt.Println("Server is running on http://localhost:8000")
+	log.Fatal(http.ListenAndServe(":8000", nil))
+
+}
