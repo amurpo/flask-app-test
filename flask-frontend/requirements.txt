@@ -1,4 +1,4 @@
 Flask==2.1.1
 Werkzeug==2.1.1
 Gunicorn
-prometheus_client
+requests==2.26.0

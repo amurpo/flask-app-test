@@ -1,5 +1,5 @@
 # Use an official Golang runtime as a parent image
-FROM golang:1.17
+FROM golang:1.20
 
 # Set the working directory inside the container
 WORKDIR /app

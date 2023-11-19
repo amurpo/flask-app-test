@@ -1,0 +1,20 @@
+version: '3'
+services:
+  app:
+    build: ./flask-frontend
+    container_name: flask-app
+    ports:
+     - "4000:4000"
+    networks:
+      - osobusa2-net
+  backend:
+    build: ./go-backend-mongodb
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    networks:
+      - osobusa2-net 
+
+networks:
+  osobusa2-net:
