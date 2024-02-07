@@ -1,0 +1,10 @@
+# values.yaml
+
+app:
+  image: amurpo/flask-app-app:latest
+  containerName: flask-app
+  port: 4000
+
+backend:
+  image: amurpo/flask-app-backend:latest
+  port: 8000

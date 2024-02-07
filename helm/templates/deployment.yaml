@@ -1,0 +1,33 @@
+# templates/deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "my-flask-app-chart.fullname" . }}
+  labels:
+    {{- include "my-flask-app-chart.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "my-flask-app-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "my-flask-app-chart.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: app
+          image: {{ .Values.app.image }}
+          ports:
+            - containerPort: {{ .Values.app.port }}
+          {{- include "my-flask-app-chart.containerSettings" . | nindent 12 }}
+
+        - name: backend
+          image: {{ .Values.backend.image }}
+          ports:
+            - containerPort: {{ .Values.backend.port }}
+          {{- include "my-flask-app-chart.containerSettings" . | nindent 12 }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "my-flask-app-chart.fullname" . }}-configmap
