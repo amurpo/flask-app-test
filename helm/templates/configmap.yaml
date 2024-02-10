@@ -6,6 +6,4 @@ metadata:
   name: {{ include "my-flask-app-chart.fullname" . }}-configmap
   labels:
     {{- include "my-flask-app-chart.labels" . | nindent 4 }}
-data:
-  env-file: |-
-    MONGO_URI=mongodb+srv://amurpo:pUgFijTh5vr95Ptm@cluster0.8ruo6pn.mongodb.net/?retryWrites=true&w=majority
+
