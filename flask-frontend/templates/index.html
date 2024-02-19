@@ -1,32 +1,103 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ get_locale() }}"></html>
 <head>
-    <title>Osobusa-kun</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans %}Osobusa-kun{% endtrans %}</title>
+    <link id="theme-link" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="/static/favicon.ico">
     <style>
         /* Center images */
         .carousel {
-            max-width: 1200px; /* Set a maximum width for the carousel */
-            max-height: 800px; /* Set a maximum height for the carousel */
-            overflow: hidden; /* Hide overflow to prevent stretching */
-            margin: 0 auto; /* Center the carousel horizontally */
+            max-width: 1200px;
+            max-height: 800px;
+            overflow: hidden;
+            margin: 0 auto;
+            position: relative; /* Añadido para posicionar el botón correctamente */
         }
+
         .carousel-item img {
-            max-width: 100%; /* Ensure images fit within the specified dimensions */
-            max-height: 100%; /* Ensure images fit within the specified dimensions */
-            width: auto; /* Maintain aspect ratio */
-            height: auto; /* Maintain aspect ratio */
-            display: block; /* Ensure images are displayed as block elements */
-            margin: 0 auto; /* Center the images horizontally */
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            display: block;
+            margin: 0 auto;
         }
+
         h1 {
             text-align: center;
+            color: black; /* Color del texto en el tema claro */
+        }
+
+        body.dark-theme {
+            background-color: #1a1a1a; /* Fondo oscuro */
+        }
+
+        h1.dark-theme {
+            color: white; /* Color del texto en el tema oscuro */
+        }
+
+        /* Estilos para el switch y el ícono */
+        .switch-container {
+            text-align: center;
+            position: absolute;
+            bottom: 0px; /* Ajusta la posición vertical según sea necesario */
+            left: 0;
+            right: 0;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: gray; /* Color del switch en el tema claro */
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: darkorchid; /* Color del switch en el tema oscuro */
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Iconos para el tema claro y oscuro */
+        .slider:before {
+            content: '☀️'; /* Ícono para el tema claro */
+        }
+
+        input:checked + .slider:before {
+            content: '🌙'; /* Ícono para el tema oscuro */
         }
     </style>
 </head>
 <body>
-    <h1>Hola, Soy un oso!</h1>
+    <h1>{% trans %}¡Hola, Soy un oso!{% endtrans %}</h1>
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="2000">
         <div class="carousel-inner">
             {% for image in images %}
@@ -35,11 +106,46 @@
                 </div>
             {% endfor %}
         </div>
+        <div class="switch-container">
+            <label class="switch">
+                <input id="slider" type="checkbox">
+                <span class="slider round"></span>
+            </label>
+        </div>
     </div>
-    
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        (function () {
+            var sliderChecked = true;
+            if (localStorage.getItem('theme') === 'theme-light') {
+                setTheme('theme-light');
+                sliderChecked = false;
+            } else {
+                setTheme('theme-dark');
+                sliderChecked = true;
+            }
+            $(document).ready(function () {
+                document.getElementById('slider').checked = sliderChecked;
+            });
+
+            document.getElementById('slider').addEventListener('change', function () {
+                if (this.checked) {
+                    setTheme('theme-dark');
+                } else {
+                    setTheme('theme-light');
+                }
+            });
+
+            function setTheme(themeName) {
+                document.body.classList.toggle('dark-theme', themeName === 'theme-dark');
+                document.querySelector('h1').classList.toggle('dark-theme', themeName === 'theme-dark');
+                localStorage.setItem('theme', themeName);
+            }
+        })();
+    </script>
 </body>
 </html>
-

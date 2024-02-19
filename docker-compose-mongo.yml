@@ -1,7 +1,7 @@
 version: '3'
 services:
   app:
-    image: amurpo/flask-app-app:latest
+    build: ./flask-frontend/
     container_name: flask-app
     ports:
      - "4000:4000"

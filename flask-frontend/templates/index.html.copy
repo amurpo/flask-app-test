@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Osobusa-kun</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/static/favicon.ico">
+    <style>
+        /* Center images */
+        .carousel {
+            max-width: 1200px; /* Set a maximum width for the carousel */
+            max-height: 800px; /* Set a maximum height for the carousel */
+            overflow: hidden; /* Hide overflow to prevent stretching */
+            margin: 0 auto; /* Center the carousel horizontally */
+        }
+        .carousel-item img {
+            max-width: 100%; /* Ensure images fit within the specified dimensions */
+            max-height: 100%; /* Ensure images fit within the specified dimensions */
+            width: auto; /* Maintain aspect ratio */
+            height: auto; /* Maintain aspect ratio */
+            display: block; /* Ensure images are displayed as block elements */
+            margin: 0 auto; /* Center the images horizontally */
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hola, Soy un oso!</h1>
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="2000">
+        <div class="carousel-inner">
+            {% for image in images %}
+                <div class="carousel-item {% if loop.index0 == 0 %}active{% endif %}">
+                    <img src="{{ image['Link'] }}" class="d-block" alt="Image {{ image['ID'] }}">
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
