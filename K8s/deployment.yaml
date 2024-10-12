@@ -15,6 +15,7 @@ spec:
       containers:
         - name: flask-app
           image: amurpo/flask-app-app:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 4000
 ---

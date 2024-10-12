@@ -1,1 +1,0 @@
-MONGO_URI=mongodb+srv://user:pass@clusterx.server.mongodb.net/?retryWrites=true&w=majority

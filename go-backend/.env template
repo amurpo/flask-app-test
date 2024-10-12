@@ -1,0 +1,8 @@
+# MySQL database credentials
+MYSQL_USER=root
+MYSQL_PASSWORD=example_password
+MYSQL_HOST=mysql
+MYSQL_DATABASE=testdb
+
+# React frontend origin for CORS
+REACT_APP_ORIGIN=http://frontend:3000

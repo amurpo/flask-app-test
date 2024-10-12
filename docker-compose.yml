@@ -1,34 +1,31 @@
-version: '3'
 services:
-  # app:
-  #   image: amurpo/osobusa-kun:latest
-  #   container_name: flask-app
-  #   ports:
-  #     - "4000:4000"
-  #   networks:
-  #     - osobusa-net
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    env_file:
+     - .env
+    ports:
+      - "3306:3306"
+    mem_limit: 512m  # Limit container memory to 512MB
+    ulimits:
+     nofile: # Fix memory leak issue on some systems when LimitCORE=infinity (containerd)
+      soft: 1048576
+      hard: 1048576
+    volumes:
+      - ./mysql/oso.sql:/docker-entrypoint-initdb.d/oso.sql
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
 
-  # mysql:
-  #   image: mysql:5.7
-  #   container_name: mysql
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - "3306:3306"
-  #   mem_limit: 512m  # Limit container memory to 512MB
-  #   volumes:
-  #     - ./oso.sql:/docker-entrypoint-initdb.d/oso.sql
-  #     - ./my.cnf:/etc/mysql/conf.d/my.cnf
-
-  #   networks:
-  #     osobusa-net:
+    networks:
+     - osobusa-net
 
   backend:
-    image: amurpo/go-backend
+    build: ./go-backend
     ports:
       - "8000:8000"
     env_file:
       - .env
+    depends_on:
+      - mysql
     networks:
       - osobusa-net 
   
@@ -38,59 +35,6 @@ services:
       - "3000:3000"
     networks:
       - osobusa-net
-
-  # prometheus:
-  #   image: prom/prometheus
-  #   container_name: prometheus
-  #   volumes:
-  #     - ./prometheus:/etc/prometheus
-  #   command:
-  #     - "--config.file=/etc/prometheus/prometheus.yml"
-  #   ports:
-  #     - "9090:9090"
-  #   networks:
-  #     - monitoring-net
-
-  # grafana:
-  #   image: grafana/grafana
-  #   container_name: grafana
-  #   volumes:
-  #     - grafana-data:/var/lib/grafana
-  #     - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-  #   ports:
-  #     - "3000:3000"
-  #   networks:
-  #     - monitoring-net
-  #   depends_on:
-  #     - prometheus
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://prometheus:9090/-/healthy"]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 5
-
-  # node-exporter:
-  #   image: prom/node-exporter
-  #   container_name: node-exporter
-  #   ports:
-  #     - "9100:9100"
-  #   networks:
-  #     - monitoring-net
-
-  # alertmanager:
-  #   image: prom/alertmanager
-  #   container_name: alertmanager
-  #   volumes:
-  #     - ./prometheus/alertmanager:/etc/alertmanager
-  #   command:
-  #     - "--config.file=/etc/alertmanager/alertmanager.yml"
-  #   ports:
-  #     - "9093:9093"
-  #   networks:
-  #     - monitoring-net
-
-# volumes:  # Define a Docker volume for Grafana data
-#   grafana-data:
 
 networks:
   osobusa-net:

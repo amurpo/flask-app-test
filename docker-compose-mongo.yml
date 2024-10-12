@@ -1,20 +1,22 @@
-version: '3'
 services:
-  app:
+  frontend:
     build: ./flask-frontend/
-    container_name: flask-app
+    container_name: frontend
+    image: amurpo/frontend:latest
     ports:
      - "4000:4000"
     networks:
-      - osobusa2-net
+      - osobusa-network
   backend:
-    image: amurpo/flask-app-backend:latest
+    build: ./go-backend-mongodb
+    container_name: backend
+    image: amurpo/backend:latest
     ports:
       - "8000:8000"
     env_file:
-      - .env
+      - ./go-backend-mongodb/.env
     networks:
-      - osobusa2-net 
+      - osobusa-network
 
 networks:
-  osobusa2-net:
+  osobusa-network:

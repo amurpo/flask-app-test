@@ -1,17 +1,30 @@
-# Use an official Golang runtime as a parent image
-FROM golang:1.20
+# Use a minimal base image for efficiency
+FROM golang:1.20-alpine AS builder
 
-# Set the working directory inside the container
+# Set the work directory
 WORKDIR /app
 
-# Copy the local package files to the container's workspace
+# Copy the Go source code to the container
 COPY . .
 
-# Build the Go application inside the container
-RUN go build -o app
+# Build the Go application
+RUN go build -o main .
 
-# Expose a port for the application to listen on
-EXPOSE 8000
+# Create a new image based on the builder image
+FROM alpine:3.20
 
-# Define the command to run your application
-CMD ["./app"]
+# Copy the built binary from the builder image
+COPY --from=builder /app/main /app/main
+
+# Create a non-root user
+RUN adduser -D appuser
+
+# Set the owner of the binary and its directory to the non-root user
+USER appuser
+WORKDIR /app
+
+# Expose the port your application listens on (if applicable)
+EXPOSE 8080
+
+# Command to run the application as the non-root user
+CMD ["/app/main"]

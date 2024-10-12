@@ -12,6 +12,6 @@ CREATE TABLE IF NOT EXISTS images (
 
 -- Inserta los registros en la tabla "images"
 INSERT INTO images (link) VALUES
-  ('https://oso-flask.s3.sa-east-1.amazonaws.com/oso.jpg'),
-  ('https://oso-flask.s3.sa-east-1.amazonaws.com/oso2.jpg'),
-  ('https://oso-flask.s3.sa-east-1.amazonaws.com/oso33.jpg');
+  ('https://f005.backblazeb2.com/file/osobusa/oso.jpg'),
+  ('https://f005.backblazeb2.com/file/osobusa/oso2.jpg'),
+  ('https://f005.backblazeb2.com/file/osobusa/oso3.jpg');

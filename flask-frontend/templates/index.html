@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ get_locale() }}"></html>
+<html lang="{{ get_locale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,7 @@
             max-height: 800px;
             overflow: hidden;
             margin: 0 auto;
-            position: relative; /* Añadido para posicionar el botón correctamente */
+            position: relative; /* Para el botón */
         }
 
         .carousel-item img {
@@ -27,22 +27,21 @@
 
         h1 {
             text-align: center;
-            color: black; /* Color del texto en el tema claro */
+            color: black;
         }
 
         body.dark-theme {
-            background-color: #1a1a1a; /* Fondo oscuro */
+            background-color: #1a1a1a; 
         }
 
         h1.dark-theme {
-            color: white; /* Color del texto en el tema oscuro */
+            color: white;
         }
 
-        /* Estilos para el switch y el ícono */
         .switch-container {
             text-align: center;
             position: absolute;
-            bottom: 0px; /* Ajusta la posición vertical según sea necesario */
+            bottom: 0px; 
             left: 0;
             right: 0;
         }
@@ -73,26 +72,25 @@
             width: 26px;
             left: 4px;
             bottom: 4px;
-            background-color: gray; /* Color del switch en el tema claro */
+            background-color: gray; 
             transition: .4s;
             border-radius: 50%;
         }
 
         input:checked + .slider {
-            background-color: darkorchid; /* Color del switch en el tema oscuro */
+            background-color: darkorchid; 
         }
 
         input:checked + .slider:before {
             transform: translateX(26px);
         }
 
-        /* Iconos para el tema claro y oscuro */
         .slider:before {
-            content: '☀️'; /* Ícono para el tema claro */
+            content: '☀️';
         }
 
         input:checked + .slider:before {
-            content: '🌙'; /* Ícono para el tema oscuro */
+            content: '🌙';
         }
     </style>
 </head>

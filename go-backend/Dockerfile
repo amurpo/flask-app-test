@@ -1,14 +1,39 @@
-# Use an official Golang runtime as a parent image
-FROM golang:1.17
+# Stage 1: Build
+FROM golang:1.22-alpine AS builder
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the local package files to the container's workspace
+# Copy dependency files
+COPY go.mod go.sum ./
+
+# Enable Go modules
+ENV GO111MODULE=on
+
+# Download dependencies
+RUN go mod download
+
+# Copy the source code
 COPY . .
 
-# Build the Go application inside the container
-RUN go build -o app
+# Build the Go application
+RUN go build -o /app/app
+
+# Stage 2: Runtime
+FROM alpine:3.20
+
+WORKDIR /app
+
+# Create a non-root user
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+# Copy the binary from the builder stage
+COPY --from=builder /app/app .
+
+# Set ownership and permissions
+RUN chown -R appuser:appgroup /app/app && chmod +x /app/app
+
+# Switch to non-root user
+USER appuser
 
 # Expose a port for the application to listen on
 EXPOSE 8000
