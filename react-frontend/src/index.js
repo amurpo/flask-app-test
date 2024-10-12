@@ -9,7 +9,7 @@ function App() {
   const [imageUrls, setImageUrls] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/images')
+    axios.get('http://backend:8000/images')
       .then(response => {
         setImageUrls(response.data);
       })

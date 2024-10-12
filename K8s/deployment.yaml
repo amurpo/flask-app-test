@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: flask-app
-          image: amurpo/flask-app-app:latest
+          image: amurpo/frontend:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 4000
@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
         - name: flask-backend
-          image: amurpo/flask-app-backend:latest
+          image: amurpo/backend:latest
           ports:
             - containerPort: 8000
           envFrom:

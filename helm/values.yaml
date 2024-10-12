@@ -1,10 +1,10 @@
 # values.yaml
 
 app:
-  image: amurpo/flask-app-app:latest
+  image: amurpo/frontend:latest
   containerName: flask-app
   port: 4000
 
 backend:
-  image: amurpo/flask-app-backend:latest
+  image: amurpo/backend:latest
   port: 8000

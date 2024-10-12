@@ -1,20 +1,27 @@
-# Use an official Node.js runtime as a parent image
+# Use a specific version of Node.js alpine image for consistency
 FROM node:16-alpine
 
-# Set the working directory inside the container
+# Create a non-root user
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the container
+# Copy package files and install dependencies
 COPY package*.json ./
+RUN npm ci --only=production
 
-# Install project dependencies
-RUN npm install
+# Copy the rest of the application code
+COPY --chown=appuser:appgroup . .
 
-# Copy the entire application code to the container
-COPY . .
+# Set correct permissions
+RUN chown -R appuser:appgroup /app
 
-# Expose a port for the application to listen on (usually 80)
-EXPOSE 4000
+# Use the non-root user
+USER appuser
 
-# Define the command to run your React app
+# Expose the port the app runs on
+EXPOSE 3000
+
+# Start the app
 CMD ["npm", "start"]
