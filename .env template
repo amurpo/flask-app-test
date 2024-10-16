@@ -1,3 +1,9 @@
+# .env
+FLASK_SECRET_KEY=
+
+# React frontend origin for CORS
+REACT_APP_ORIGIN=http://frontend:3000
+
 # MySQL database credentials
 MYSQL_USER=
 MYSQL_PASSWORD=
@@ -7,6 +13,5 @@ MYSQL_ROOT_PASSWORD=
 MYSQL_ALLOW_EMPTY_PASSWORD=no
 MYSQL_RANDOM_ROOT_PASSWORD=no
 
-
-# React frontend origin for CORS
-REACT_APP_ORIGIN=http://frontend:3000
+#MongoDB
+MONGO_URI=mongodb+srv://

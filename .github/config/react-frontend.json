@@ -1,0 +1,9 @@
+{
+    "projectName": "react-frontend",
+    "language": "javascript",
+    "version": "20",
+    "sourcesPath": "src",
+    "testsPath": "src/__tests__",
+    "coverageReportPath": "coverage/lcov.info",
+    "sonarOptions": "-Dsonar.sources=src -Dsonar.tests=src/__tests__ -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info -Dsonar.language=javascript"
+  }

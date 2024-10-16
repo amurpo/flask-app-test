@@ -14,7 +14,7 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - ./go-backend-mongodb/.env
+      - .env
     networks:
       - osobusa-network
 

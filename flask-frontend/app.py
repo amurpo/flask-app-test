@@ -9,8 +9,8 @@ def get_user_locale():
 def create_app():
     app = Flask(__name__)
 
-    # Set a secret key for the session
-    app.config['SECRET_KEY'] = os.urandom(24)
+    # Set a secret key for the session from environment variable
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', os.urandom(24).hex())  # Use hex to get a string representation
 
     # Configuración de la cookie de sesión (se configurará más adelante)
     app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Valor predeterminado
@@ -72,3 +72,4 @@ def create_app():
         return ('', 204)
 
     return app
+

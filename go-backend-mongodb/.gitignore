@@ -30,8 +30,4 @@ Thumbs.db
 Desktop.ini
 ehthumbs.db
 
-# Dependency directories (https://golang.org/cmd/go/#hdr-Module_aware_go_get)
-/go.sum
-/go.mod
-/vendor/
 .env

@@ -1,0 +1,9 @@
+{
+    "projectName": "go-backend",
+    "language": "go",
+    "version": "1.21",
+    "sourcesPath": ".",
+    "testsPath": ".",
+    "coverageReportPath": "coverage.out",
+    "sonarOptions": "-Dsonar.sources=. -Dsonar.tests=. -Dsonar.go.coverage.reportPaths=coverage.out -Dsonar.language=go"
+  }
