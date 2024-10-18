@@ -2,7 +2,7 @@ services:
   frontend:
     build: ./flask-frontend/
     container_name: frontend
-    image: amurpo/frontend:latest
+    image: amurpo/flask-frontend:latest
     ports:
      - "4000:4000"
     networks:
@@ -10,7 +10,7 @@ services:
   backend:
     build: ./go-backend-mongodb
     container_name: backend
-    image: amurpo/backend:latest
+    image: amurpo/go-backend:latest
     ports:
       - "8000:8000"
     env_file:
