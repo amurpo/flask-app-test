@@ -1,5 +1,5 @@
 # Use a specific version of Node.js alpine image for consistency
-FROM node:16-alpine
+FROM node:18-alpine
 
 # Create a non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup

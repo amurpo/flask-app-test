@@ -1,6 +1,6 @@
 from flask import Flask, render_template, session, request
 from flask_babel import Babel, _
-import os  # Import the 'os' module for generating a secret key
+import os
 import requests
 
 def get_user_locale():
@@ -8,25 +8,22 @@ def get_user_locale():
 
 def create_app():
     app = Flask(__name__)
-
     # Set a secret key for the session from environment variable
-    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', os.urandom(24).hex())  # Use hex to get a string representation
-
-    # Configuración de la cookie de sesión (se configurará más adelante)
-    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Valor predeterminado
-    app.config['SESSION_COOKIE_SECURE'] = False  # Valor predeterminado
-
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', os.urandom(24).hex())
+    
+    # Session cookie configuration
+    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+    app.config['SESSION_COOKIE_SECURE'] = False
+    
     # Configure Flask-Babel
-    babel = Babel(app)
     app.config['LANGUAGES'] = ['en', 'es', 'tr', 'ko']
     app.config['BABEL_DEFAULT_LOCALE'] = 'es'
+    babel = Babel(app)
+    
+    # Set the locale selector function directly
+    babel.init_app(app, locale_selector=get_user_locale)
 
-    # Ensure locale selection after Flask initialization
-    @babel.localeselector
-    def get_locale():
-        return get_user_locale()
-
-    # Replace this URL with your Go GraphQL server endpoint
+    # GraphQL endpoint
     GRAPHQL_URL = "http://backend:8000/graphql"
 
     def fetch_images():
@@ -38,31 +35,34 @@ def create_app():
             }
         }
         '''
-
-        response = requests.post(GRAPHQL_URL, json={'query': query})
-        data = response.json()
-        return data['data']['images']
+        try:
+            response = requests.post(GRAPHQL_URL, json={'query': query})
+            response.raise_for_status()
+            data = response.json()
+            return data.get('data', {}).get('images', [])
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching images: {e}")
+            return []
 
     @app.before_request
     def before_request():
         if request.endpoint == 'static':
-            return  # Skip language setting for static files
-
+            return
+        
         session['lang'] = request.args.get('lang', session.get('lang', 'en'))
-
-        # Configura la cookie de sesión según el protocolo de la solicitud
-        if request.headers.get('X-Forwarded-Proto') == 'https' or request.scheme == 'https':
-            app.config['SESSION_COOKIE_SAMESITE'] = 'None'
-            app.config['SESSION_COOKIE_SECURE'] = True
-        else:
-            app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
-            app.config['SESSION_COOKIE_SECURE'] = False
+        
+        is_secure = request.headers.get('X-Forwarded-Proto') == 'https' or request.scheme == 'https'
+        app.config['SESSION_COOKIE_SAMESITE'] = 'None' if is_secure else 'Lax'
+        app.config['SESSION_COOKIE_SECURE'] = is_secure
 
     @app.route('/')
     def index():
         images = fetch_images()
-        context = {'get_locale': get_locale, 'gettext': _}  # Include get_locale in the context
-        print(_('Hello, I am a bear!'))  # Imprimirá la traducción en la consola de la aplicación
+        context = {
+            'get_locale': get_user_locale,
+            'gettext': _
+        }
+        print(_('Hello, I am a bear!'))
         return render_template('index.html', images=images, **context)
 
     @app.route('/set_language/<lang>', methods=['POST'])
@@ -72,4 +72,3 @@ def create_app():
         return ('', 204)
 
     return app
-
