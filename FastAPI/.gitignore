@@ -13,10 +13,6 @@ ENV/
 .env
 .env.*
 
-# Ignore Docker-related files
-Dockerfile
-docker-compose.yml
-
 # Ignore IDE and editor files
 .vscode/
 .idea/
