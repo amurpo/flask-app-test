@@ -3,26 +3,30 @@ import { createRoot } from 'react-dom/client';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import axios from 'axios';
-import './App.css'; // Import the CSS for styling
+import './App.css';
 
 function App() {
   const [imageUrls, setImageUrls] = useState([]);
+  
+  // Determina la URL base según el entorno
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
   useEffect(() => {
-    axios.get('http://backend:8000/images')
-      .then(response => {
-        setImageUrls(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching image data:', error);
-      });
+    // Usa la URL base configurada
+    axios.get(`${API_URL}/images`, {
+      headers: {
+        'Content-Type': 'application/json',
+        // Agrega headers adicionales si son necesarios
+      },
+      withCredentials: true // Si estás usando cookies
+    })
+    .then(response => {
+      setImageUrls(response.data);
+    })
+    .catch(error => {
+      console.error('Error fetching image data:', error);
+    });
   }, []);
-
-  useEffect(() => {
-    if(imageUrls.length > 0) {
-      console.log(imageUrls);
-    }
-  }, [imageUrls]);
 
   return (
     <div className="carousel-container">
@@ -37,18 +41,25 @@ function App() {
         <Slider>
           {imageUrls.map((imgUrl, index) => (
             <Slide index={index} key={imgUrl.id}>
-              <img className="centered-slide" src={imgUrl.link} alt={`Image ${imgUrl.id}`} />
+              <img 
+                className="centered-slide" 
+                src={imgUrl.link} 
+                alt={`Image ${imgUrl.id}`}
+                onError={(e) => {
+                  console.error(`Error loading image: ${imgUrl.link}`);
+                  e.target.src = 'placeholder.jpg'; // Imagen de respaldo
+                }}
+              />
             </Slide>
           ))}
         </Slider>
-        <ButtonBack></ButtonBack>
-        <ButtonNext></ButtonNext>
+        <ButtonBack>Back</ButtonBack>
+        <ButtonNext>Next</ButtonNext>
       </CarouselProvider>
     </div>
   );
 }
 
-// Assuming '#root' is the ID of your root div in the HTML
 const container = document.querySelector('#root');
 if (container) {
   createRoot(container).render(<App />);

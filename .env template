@@ -2,7 +2,7 @@
 FLASK_SECRET_KEY=
 
 # React frontend origin for CORS
-REACT_APP_ORIGIN=http://frontend:3000
+REACT_APP_API_URL=http://localhost:8000
 
 # MySQL database credentials
 MYSQL_USER=

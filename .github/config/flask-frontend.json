@@ -1,9 +1,0 @@
-{
-    "projectName": "flask-frontend",
-    "language": "python",
-    "version": "3.11",
-    "sourcesPath": "app",
-    "testsPath": "tests",
-    "coverageReportPath": "coverage.xml",
-    "sonarOptions": "-Dsonar.sources=app -Dsonar.tests=tests -Dsonar.python.coverage.reportPaths=coverage.xml -Dsonar.language=python"
-  }
