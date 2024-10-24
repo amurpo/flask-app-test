@@ -29,7 +29,6 @@ function App() {
   }, []);
 
   return (
-   hola ql
     <div className="carousel-container">
       <CarouselProvider
         naturalSlideWidth={100}
