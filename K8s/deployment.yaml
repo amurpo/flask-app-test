@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flask-app-deployment
+  name: frontend-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: flask-app
+      app: frontend
   template:
     metadata:
       labels:
-        app: flask-app
+        app: frontend
     spec:
       containers:
-        - name: flask-app
-          image: amurpo/frontend:latest
+        - name: frontend
+          image: amurpo/flask-frontend:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 4000
@@ -22,20 +22,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flask-backend-deployment
+  name: backend-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: flask-backend
+      app: backend
   template:
     metadata:
       labels:
-        app: flask-backend
+        app: backend
     spec:
       containers:
-        - name: flask-backend
-          image: amurpo/backend:latest
+        - name: backend
+          image: amurpo/go-backend:latest
           ports:
             - containerPort: 8000
           envFrom:

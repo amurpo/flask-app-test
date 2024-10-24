@@ -16,8 +16,7 @@ origins = [
     "http://localhost:3000",    # React frontend running locally
     "http://frontend:3000",     # React frontend in Docker
     "http://localhost:8000",    # Backend URL
-    "http://backend:8000",      # Backend URL in Docker
-    "*"                         # Durante desarrollo, permite todos los orígenes
+    "http://backend:8000"      # Backend URL in Docker
 ]
 
 app.add_middleware(

@@ -1,26 +1,26 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: flask-app-service
+  name: frontend-service
 spec:
   selector:
-    app: flask-app
+    app: frontend
   ports:
     - protocol: TCP
       port: 4000
       targetPort: 4000
-  type: NodePort
-
+  type: LoadBalancer # Cambiado a LoadBalancer
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend
+  name: backend-service
 spec:
   selector:
-    app: flask-backend
+    app: backend
   ports:
     - protocol: TCP
       port: 8000
       targetPort: 8000
-  type: NodePort
+  type: ClusterIP # Cambiado a ClusterIP (comunicación interna)
+
