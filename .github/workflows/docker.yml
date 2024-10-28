@@ -32,13 +32,9 @@ jobs:
             services+=("react-frontend")
           fi
           
-          if [ ${#services[@]} -gt 0 ]; then
-            matrix=$(printf '%s\n' "${services[@]}" | jq -R . | jq -s .)
-            echo "matrix=$matrix" >> $GITHUB_OUTPUT
-          else
-            echo "matrix=[]" >> $GITHUB_OUTPUT
-          fi
-
+          # Set the matrix as a single JSON array string output
+          echo "matrix=$(printf '%s\n' "${services[@]}" | jq -R . | jq -s .)" >> $GITHUB_OUTPUT
+          
   build-and-push:
     needs: check-changes
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && fromJSON(needs.check-changes.outputs.matrix)[0] != null }}
