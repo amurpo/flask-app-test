@@ -35,7 +35,11 @@ jobs:
             services+=("react-frontend")
           fi
           
-          echo "services=${{ join(services, ' ') }}" >> $GITHUB_OUTPUT
+          if [ ${#services[@]} -gt 0 ]; then
+            echo "services=$(printf '"%s"' "${services[@]}")" >> $GITHUB_OUTPUT
+          else
+            echo "services=" >> $GITHUB_OUTPUT
+          fi
 
   build-and-push:
     needs: check-changes
@@ -43,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: ${{ fromJson(format('["{}"]]', needs.check-changes.outputs.services)) }}
+        service: ${{ fromJson(needs.check-changes.outputs.services) }}
       fail-fast: false
     
     steps:
