@@ -35,11 +35,7 @@ jobs:
             services+=("react-frontend")
           fi
           
-          if [ ${#services[@]} -gt 0 ]; then
-            echo "services=$(printf '"%s"' "${services[@]}")" >> $GITHUB_OUTPUT
-          else
-            echo "services=" >> $GITHUB_OUTPUT
-          fi
+          echo "services=${{ toJson(services) }}" >> $GITHUB_OUTPUT
 
   build-and-push:
     needs: check-changes
