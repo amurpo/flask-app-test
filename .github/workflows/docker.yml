@@ -35,7 +35,12 @@ jobs:
             services+=("react-frontend")
           fi
           
-          echo "services=${{ toJson(services) }}" >> $GITHUB_OUTPUT
+          services_string=""
+          for service in "${services[@]}"; do
+            services_string+="\"$service\","
+          done
+          services_string="${services_string%,}"
+          echo "services=$services_string" >> $GITHUB_OUTPUT
 
   build-and-push:
     needs: check-changes
@@ -43,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: ${{ fromJson(needs.check-changes.outputs.services) }}
+        service: ${{ fromJson(format('[{}]', needs.check-changes.outputs.services)) }}
       fail-fast: false
     
     steps:
