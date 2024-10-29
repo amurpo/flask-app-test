@@ -37,8 +37,7 @@ function App() {
         isPlaying={true}
         interval={3000}
         infinite={true}
-      >     <div  hols
-      >
+      > 
         <Slider>
           {imageUrls.map((imgUrl, index) => (
             <Slide index={index} key={imgUrl.id}>
