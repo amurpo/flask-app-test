@@ -13,12 +13,12 @@ jobs:
   check-changes:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      services: ${{ steps.set-services.outputs.services }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - id: set-matrix
+      - id: set-services
         run: |
           services=()
           
@@ -35,16 +35,15 @@ jobs:
             services+=("react-frontend")
           fi
           
-          matrix=$(jq -n --arg v "${services[*]}" '$v')
-          echo "matrix=$matrix" >> $GITHUB_OUTPUT
+          echo "services=${{ join(services, ',') }}" >> $GITHUB_OUTPUT
 
   build-and-push:
     needs: check-changes
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && fromJSON(needs.check-changes.outputs.matrix)[0] != null }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.check-changes.outputs.services != '' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: ${{ fromJSON(needs.check-changes.outputs.matrix) }}
+        service: ${{ split(needs.check-changes.outputs.services, ',') }}
       fail-fast: false
     
     steps:
@@ -72,7 +71,6 @@ jobs:
       - name: Display image URLs
         run: |
           echo "The following images have been published:"
-          echo "${{ secrets.DOCKER_USERNAME }}/fastapi:latest"
-          echo "${{ secrets.DOCKER_USERNAME }}/flask-frontend:latest"
-          echo "${{ secrets.DOCKER_USERNAME }}/go-backend:latest"
-          echo "${{ secrets.DOCKER_USERNAME }}/react-frontend:latest"
+          for service in fastapi flask-frontend go-backend react-frontend; do
+            echo "${{ secrets.DOCKER_USERNAME }}/$service:latest"
+          done
