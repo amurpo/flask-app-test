@@ -1,5 +1,4 @@
 name: Build and Push Docker Images
-
 on:
   push:
     paths:
@@ -7,75 +6,46 @@ on:
       - 'flask-frontend/**'
       - 'go-backend-mongodb/**'
       - 'react-frontend/**'
-
 jobs:
-
-  check-changes:
+  build:
     runs-on: ubuntu-latest
-    outputs:
-      services: ${{ steps.set-services.outputs.services }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - id: set-services
-        run: |
-          services=()
-          
-          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q 'FastAPI/'; then
-            services+=("fastapi")
-          fi
-          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q 'flask-frontend/'; then
-            services+=("flask-frontend")
-          fi
-          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q 'go-backend-mongodb/'; then
-            services+=("go-backend")
-          fi
-          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q 'react-frontend/'; then
-            services+=("react-frontend")
-          fi
-          
-          services_string=""
-          for service in "${services[@]}"; do
-            services_string+="\"$service\","
-          done
-          services_string="${services_string%,}"
-          echo "services=$services_string" >> $GITHUB_OUTPUT
-
-  build-and-push:
-    needs: check-changes
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.check-changes.outputs.services != '' }}
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service: ${{ fromJson(format('[{}]', needs.check-changes.outputs.services)) }}
-      fail-fast: false
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
-      
-      - name: Build and push ${{ matrix.service }}
-        uses: docker/build-push-action@v3
-        with:
-          context: ./${{ matrix.service }}
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:latest
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:latest
-          cache-to: type=inline
-
-      - name: Display image URLs
+          username: ${{ secrets.DOCKER_USERNAME }}  
+          password: ${{ secrets.DOCKER_TOKEN }}      
+      - name: Build and push FastAPI
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }} 
         run: |
-          echo "The following images have been published:"
-          for service in fastapi flask-frontend go-backend react-frontend; do
-            echo "${{ secrets.DOCKER_USERNAME }}/$service:latest"
-          done
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q 'FastAPI/'; then
+            docker build -t ${{ secrets.DOCKER_USERNAME }}/fastapi:latest ./FastAPI
+            docker push ${{ secrets.DOCKER_USERNAME }}/fastapi:latest
+          fi
+      - name: Build and push Flask Frontend
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }} 
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q 'flask-frontend/'; then
+            docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-frontend:latest ./flask-frontend
+            docker push ${{ secrets.DOCKER_USERNAME }}/flask-frontend:latest
+          fi
+      - name: Build and push Go Backend
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }} 
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q 'go-backend-mongodb/'; then
+            docker build -t ${{ secrets.DOCKER_USERNAME }}/go-backend:latest ./go-backend-mongodb
+            docker push ${{ secrets.DOCKER_USERNAME }}/go-backend:latest
+          fi
+      - name: Build and push React Frontend
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }} 
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q 'react-frontend/'; then
+            docker build -t ${{ secrets.DOCKER_USERNAME }}/react-frontend:latest ./react-frontend
+            docker push ${{ secrets.DOCKER_USERNAME }}/react-frontend:latest
+          fi
