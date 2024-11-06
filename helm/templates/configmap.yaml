@@ -1,9 +1,9 @@
-# templates/configmap.yaml
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "my-flask-app-chart.fullname" . }}-configmap
   labels:
     {{- include "my-flask-app-chart.labels" . | nindent 4 }}
+data:
+  MONGO_URI: "{{ .Values.mongodb.uri }}"
 

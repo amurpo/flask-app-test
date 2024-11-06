@@ -1,10 +1,12 @@
-# values.yaml
-
 app:
-  image: amurpo/frontend:latest
+  image: amurpo/flask-frontend:latest
   containerName: flask-app
   port: 4000
 
 backend:
-  image: amurpo/backend:latest
+  image: amurpo/go-backend:latest
   port: 8000
+
+mongodb:
+  uri: "mongodb+srv://amurpo:SryB8p59yhnMMueB@cluster0.vmm19.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+

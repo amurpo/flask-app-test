@@ -13,12 +13,10 @@ app = FastAPI()
 
 # Configura CORS
 origins = [
-    "http://localhost:3000",    # React frontend running locally
-    "http://frontend:3000",     # React frontend in Docker
-    "http://localhost:8000",    # Backend URL
-    "http://backend:8000"      # Backend URL in Docker
+    "http://localhost:3000",  # React frontend running locally
+    "http://frontend:3000",
+    "http://127.0.0.1:3000"
 ]
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,

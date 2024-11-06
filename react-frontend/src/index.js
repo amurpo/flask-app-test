@@ -10,10 +10,10 @@ function App() {
   
   // Determina la URL base según el entorno
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-
+  console.log(API_URL);
   useEffect(() => {
     // Usa la URL base configurada
-    axios.get(`${API_URL}/images`, {
+    axios.get('/images', {
       headers: {
         'Content-Type': 'application/json',
         // Agrega headers adicionales si son necesarios
@@ -26,7 +26,7 @@ function App() {
     .catch(error => {
       console.error('Error fetching image data:', error);
     });
-  }, []);
+  }, [API_URL]); // Include API_URL in the dependency array
 
   return (
     <div className="carousel-container">

@@ -4,8 +4,6 @@ services:
     container_name: mysql
     env_file:
      - .env
-    ports:
-      - "3306:3306"
     mem_limit: 512m  # Limit container memory to 512MB
     ulimits:
      nofile: # Fix memory leak issue on some systems when LimitCORE=infinity (containerd)
@@ -21,9 +19,6 @@ services:
   backend:
     build: ./FastAPI
     container_name: backend
-    image: amurpo/fastapi:latest
-    ports:
-      - "8000:8000"
     env_file:
       - .env
     depends_on:
@@ -33,10 +28,10 @@ services:
   
   frontend:
     build: ./react-frontend
-    image: amurpo/react-frontend:latest
     container_name: frontend
     ports:
       - "3000:3000"
+    env_file: .env
     networks:
       - osobusa-net
 
